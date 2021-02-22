@@ -1,37 +1,19 @@
-import React, { useState} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-	TextInput,
-  StatusBar,
-	Button,
-	Alert,
-} from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 
 import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
 
-const Login: () => React$Node = () => {
+const Login: () => React$Node = (props) => {
 	const [user, setUser] = useState('admin');
 	const [password, setPassword] = useState('admin');
+	const [server, setServer] = useState('http://192.168.1.140:10200');
 
-	const onLoginClicked = () => {
-		if (user !== '' && password !== '') {
-			Alert.alert('HaHA');
-		} else {
-			Alert.alert('Credentials empty');
-		}
-	}
-
-  return (
-		<>
+  return (	
 		<View style={styles.body}>
 			<View style={styles.sectionContainer}>
-				<Text style={styles.sectionTitle}>User:</Text>
+				<Text style={styles.sectionTitle}>User</Text>
 				<TextInput
 					style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
 					onChangeText={text => setUser(text)}
@@ -39,33 +21,34 @@ const Login: () => React$Node = () => {
 			</View>
 
 			<View style={styles.sectionContainer}>
-				<Text style={styles.sectionTitle}>Password:</Text>
+				<Text style={styles.sectionTitle}>Password</Text>
 				<TextInput
 					style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
 					onChangeText={text => setPassword(text)}
 					value={password}/>
 			</View>
 
+      <View style={styles.sectionContainer}>
+				<Text style={styles.sectionTitle}>Server</Text>
+				<TextInput
+					style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+					onChangeText={text => setServer(text)}
+					value={server}/>
+			</View>
+
 			<View style={styles.sectionContainer}>
 			<Button
         title="LOGIN"
-        onPress={() => onLoginClicked()}
+        onPress={() => props.loginHandler(props.history)}
+        disabled={user === '' || password === '' || server === ''}
       />
 			</View>
 
 		</View>
-		</>
   );
 };
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
   body: {
     backgroundColor: Colors.white,
   },
@@ -77,23 +60,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '600',
     color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
   },
 });
 
