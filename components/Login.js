@@ -1,50 +1,120 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-
+import React, {useState, useContext} from 'react';
 import {
-  Colors,
-} from 'react-native/Libraries/NewAppScreen';
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
+import AuthContext from '../context/auth';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+import axios from 'axios';
 
 const Login: () => React$Node = (props) => {
-	const [user, setUser] = useState('admin');
-	const [password, setPassword] = useState('admin');
-	const [server, setServer] = useState('http://192.168.1.140:10200');
+  const {isAuthorized, setIsAuthorized, server, setServer} = useContext(
+    AuthContext,
+  );
+  const [user, setUser] = useState('admin');
+  const [password, setPassword] = useState('admin');
+  const [isLoading, setIsLoading] = useState(false);
 
-  return (	
-		<View style={styles.body}>
-			<View style={styles.sectionContainer}>
-				<Text style={styles.sectionTitle}>User</Text>
-				<TextInput
-					style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-					onChangeText={text => setUser(text)}
-					value={user}/>
-			</View>
+  const onLoginClicked = async () => {
+    setIsLoading(true);
+    setIsAuthorized(false);
+    const body = {
+      Action: 'Login',
+      Parameters: {
+        username: user,
+        password: password,
+        rememberMe: false,
+      },
+    };
 
-			<View style={styles.sectionContainer}>
-				<Text style={styles.sectionTitle}>Password</Text>
-				<TextInput
-					style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-					onChangeText={text => setPassword(text)}
-					value={password}/>
-			</View>
+    const options = {
+      url: server,
+      method: 'post',
+      data: body,
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'ecs/json',
+        Action: 'Login',
+      },
+      withCredentials: true,
+    };
+    try {
+      const response = await axios(options);
+
+      const accountStatus = response?.data?.ReturnValue?.AccountStatus;
+      const dropPassValidation =
+        response?.data?.ReturnValue?.DropPassValidation;
+      const PassPattern = response?.data?.ReturnValue?.PassPattern;
+      const ticket = response?.data?.ReturnValue?.Ticket;
+      const userId = response?.data?.ReturnValue?.UserID;
+
+      if (accountStatus === 3 && response.status === 200) {
+        // set isAuthenticated = true;
+        setIsAuthorized(true);
+      } else {
+        // set isAuthenticated = false;
+        // show error message on login screenSize
+        Alert('Error on login');
+      }
+
+      console.log(response);
+    } catch (err) {
+      Alert('Error on login');
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <View style={styles.body}>
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>User</Text>
+        <TextInput
+          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          onChangeText={(text) => setUser(text)}
+          value={user}
+        />
+      </View>
 
       <View style={styles.sectionContainer}>
-				<Text style={styles.sectionTitle}>Server</Text>
-				<TextInput
-					style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-					onChangeText={text => setServer(text)}
-					value={server}/>
-			</View>
+        <Text style={styles.sectionTitle}>Password</Text>
+        <TextInput
+          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          onChangeText={(text) => setPassword(text)}
+          value={password}
+        />
+      </View>
 
-			<View style={styles.sectionContainer}>
-			<Button
-        title="LOGIN"
-        onPress={() => props.loginHandler(props.history)}
-        disabled={user === '' || password === '' || server === ''}
-      />
-			</View>
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Server</Text>
+        <TextInput
+          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          onChangeText={(text) => setServer(text)}
+          value={server}
+        />
+      </View>
 
-		</View>
+      <View style={styles.sectionContainer}>
+        <Button
+          title="LOGIN"
+          onPress={() => onLoginClicked()}
+          disabled={user === '' || password === '' || server === ''}
+        />
+      </View>
+
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>
+          Authenticated: {isAuthorized ? 'True' : 'False'}
+        </Text>
+        {isLoading && <ActivityIndicator size="large" />}
+      </View>
+    </View>
   );
 };
 
