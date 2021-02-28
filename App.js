@@ -11,11 +11,6 @@ const App: () => React$Node = (props) => {
 	const [authenticated, setAuthenticated] = useState(false);
 	const [history, setHistory] = useState();
 
-	/* const onLoginClicked = (history) => {
-      setHistory(history);
-      setAuthenticated(true);
-	} */
-
 	useEffect(() => {
 		if (authenticated) {
 			history.push('/dashboard');
@@ -33,9 +28,8 @@ const App: () => React$Node = (props) => {
 				<ScrollView contentInsetAdjustmentBehavior='automatic' style={styles.scrollView}>
 					<AuthContext.Provider value={value}>
 						<NativeRouter>
-							<Route exact path='/' render={(props) => <Login />} />
-							{/* loginHandler={onLoginClicked} history={props.history} */}
-							<PrivateRoute path='/dashboard' component={Dashboard} authenticated={authenticated} />
+							<Route exact path='/' component={Login} />
+							<PrivateRoute path='/dashboard' component={Dashboard} />
 						</NativeRouter>
 					</AuthContext.Provider>
 				</ScrollView>

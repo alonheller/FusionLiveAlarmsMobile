@@ -1,10 +1,12 @@
 import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { useHistory } from 'react-router-native';
 import AuthContext from '../context/auth';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import axios from 'axios';
 
 const Login: () => React$Node = (props) => {
+	const history = useHistory();
 	const { isAuthorized, setIsAuthorized, server, setServer } = useContext(AuthContext);
 	const [user, setUser] = useState('admin');
 	const [password, setPassword] = useState('admin');
@@ -42,24 +44,20 @@ const Login: () => React$Node = (props) => {
 			const ticket = response?.data?.ReturnValue?.Ticket;
 			const userId = response?.data?.ReturnValue?.UserID;
 
+			setIsLoading(false);
 			if (accountStatus === 3 && response.status === 200) {
-				// set isAuthenticated = true;
 				setIsAuthorized(true);
+				history.push('/dashboard');
 			} else {
-				// set isAuthenticated = false;
-				// show error message on login screenSize
-				Alert('Error on login');
+				Alert.alert('Error on login');
 			}
-
-			console.log(response);
 		} catch (err) {
+			setIsLoading(false);
 			if (err?.message === 'Request failed with status code 401') {
 				Alert.alert('Wrong User or Password');
 			} else {
 				Alert.alert('Server is down');
 			}
-		} finally {
-			setIsLoading(false);
 		}
 	};
 

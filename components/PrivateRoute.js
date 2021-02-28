@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Route, Redirect } from 'react-router-native';
 import { View, Text, StyleSheet } from 'react-native';
+import AuthContext from '../context/auth';
 
 const PrivateRoute: () => React$Node = ({ component: Comp, ...rest }) => {
-	const { authenticated } = rest;
+	// const { authenticated } = rest;
+	const { isAuthorized } = useContext(AuthContext);
 
 	return (
 		<View>
 			<Route
 				{...rest}
 				render={(rest) => {
-					if (authenticated) {
+					if (isAuthorized) {
 						return <Comp {...rest} />;
 					} else {
 						return (
