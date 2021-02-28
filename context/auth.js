@@ -1,10 +1,10 @@
-import {createContext} from 'react';
+import { createContext } from 'react';
 
 const AuthContext = createContext({
-  isAuthorized: false,
-  setIsAuthorized: () => {},
-  server: '',
-  setServer: () => {},
+	isAuthorized: false,
+	setIsAuthorized: () => {},
+	server: '',
+	setServer: () => {}
 });
 
 export default AuthContext;

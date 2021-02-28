@@ -1,5 +1,5 @@
-import {createContext} from 'react-native';
+import { createContext } from 'react-native';
 
 export default createContext({
-  alarmsList: [],
+	alarmsList: []
 });
