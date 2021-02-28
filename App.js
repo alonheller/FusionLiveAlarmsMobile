@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, ScrollView, View, StatusBar } from 'react-native';
 import { NativeRouter, Route, Redirect, withRouter } from 'react-router-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AuthContext from './context/auth';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import PrivateRoute from './components/PrivateRoute';
@@ -23,17 +24,19 @@ const App: () => React$Node = (props) => {
 
 	return (
 		<>
-			<StatusBar barStyle='dark-content' />
-			<SafeAreaView>
-				<ScrollView contentInsetAdjustmentBehavior='automatic' style={styles.scrollView}>
-					<AuthContext.Provider value={value}>
-						<NativeRouter>
-							<Route exact path='/' component={Login} />
-							<PrivateRoute path='/dashboard' component={Dashboard} />
-						</NativeRouter>
-					</AuthContext.Provider>
-				</ScrollView>
-			</SafeAreaView>
+			<SafeAreaProvider>
+				<StatusBar barStyle='dark-content' />
+				<SafeAreaView>
+					<ScrollView contentInsetAdjustmentBehavior='automatic' style={styles.scrollView}>
+						<AuthContext.Provider value={value}>
+							<NativeRouter>
+								<Route exact path='/' component={Login} />
+								<PrivateRoute path='/dashboard' component={Dashboard} />
+							</NativeRouter>
+						</AuthContext.Provider>
+					</ScrollView>
+				</SafeAreaView>
+			</SafeAreaProvider>
 		</>
 	);
 };

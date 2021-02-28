@@ -8,6 +8,8 @@ target 'FusionLiveAlarmsMobile' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+
+
   target 'FusionLiveAlarmsMobileTests' do
     inherit! :complete
     # Pods for testing
