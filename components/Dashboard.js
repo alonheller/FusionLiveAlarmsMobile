@@ -1,50 +1,85 @@
 import React, { useState } from 'react';
-import { TouchableHighlight } from 'react-native';
+import { TouchableHighlight, View } from 'react-native';
 import { Text } from 'react-native';
-import { ListItem, Avatar, Badge, Icon } from 'react-native-elements';
+import SummaryInfo from './SummaryInfo';
+import AlarmListItem from './AlarmListItem';
+
+const alarms = [
+	{
+		assetMeasure: 'Temperature',
+		value: '32.0 °F',
+		location: "Eran's House",
+		asset: 'Garage Cooler',
+		time: '2d 7h 45m 14s',
+		status: 'ok'
+	},
+	{
+		assetMeasure: 'Humidty',
+		value: '16.9 %RH',
+		location: 'Lab',
+		asset: 'Clean Room',
+		time: '12m 24s',
+		status: 'critical'
+	},
+	{
+		assetMeasure: 'Temperature',
+		value: '29.0 °F',
+		location: "Eran's House",
+		asset: 'Garage Cooler',
+		time: '2d 7h 45m 14s',
+		status: 'fault'
+	},
+	{
+		assetMeasure: 'Temperature',
+		value: '10.0 °F',
+		location: "Eran's House",
+		asset: 'Garage Cooler',
+		time: '2d 7h 45m 14s',
+		status: 'warning'
+	},
+	{
+		assetMeasure: 'Temperature',
+		value: '10.0 °F',
+		location: "Eran's House",
+		asset: 'Garage Cooler',
+		time: '2d 7h 45m 14s',
+		status: 'error'
+	},
+	{
+		assetMeasure: 'Temperature',
+		value: '10.0 °F',
+		location: "Eran's House",
+		asset: 'Garage Cooler',
+		time: '2d 7h 45m 14s',
+		status: 'error'
+	},
+	{
+		assetMeasure: 'Temperature',
+		value: '10.0 °F',
+		location: "Eran's House",
+		asset: 'Garage Cooler',
+		time: '2d 7h 45m 14s',
+		status: 'error'
+	},
+	{
+		assetMeasure: 'Temperature',
+		value: '10.0 °F',
+		location: "Eran's House",
+		asset: 'Garage Cooler',
+		time: '2d 7h 45m 14s',
+		status: 'error'
+	}
+];
 
 const Dashboard: () => React$Node = () => {
 	return (
 		<>
-			<Badge value='3' status='success' />
-			<Badge value='99+' status='error' />
-			<Badge value='5' status='primary' />
-			<Badge value='22' status='warning' />
-			<ListItem
-				Component={TouchableHighlight}
-				containerStyle={{}}
-				disabledStyle={{ opacity: 0.5 }}
-				onLongPress={() => console.log('onLongPress()')}
-				onPress={() => console.log('onLongPress()')}
-				pad={20}>
-				<Icon name='error-outline' />
-				<ListItem.Content>
-					<ListItem.Title>
-						<Text>Temperature 32.0 °F</Text>
-					</ListItem.Title>
-					<ListItem.Subtitle>
-						<Text>Eran's House</Text>
-					</ListItem.Subtitle>
-					<ListItem.Subtitle>
-						<Text>Garage Cooler</Text>
-					</ListItem.Subtitle>
-					<ListItem.Subtitle>
-						<Text>2d 7h 45m 14s</Text>
-					</ListItem.Subtitle>
-				</ListItem.Content>
-			</ListItem>
+			<SummaryInfo></SummaryInfo>
+			{alarms.map((alarm) => (
+				<AlarmListItem alarm={alarm} />
+			))}
 		</>
 	);
 };
-
-/* const styles = StyleSheet.create({
-	body: {
-		backgroundColor: Colors.white
-	},
-	sectionContainer: {
-		marginTop: 32,
-		paddingHorizontal: 24
-	}
-}); */
 
 export default Dashboard;
