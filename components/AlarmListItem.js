@@ -19,7 +19,7 @@ const AlarmListItem: (props) => React$Node = (props) => {
 			case 'error':
 				return 'error-outline';
 			case 'ok':
-				return 'checkcircleo';
+				return 'warning';
 			default:
 				return 'questioncircleo';
 		}
