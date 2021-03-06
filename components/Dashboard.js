@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { TouchableHighlight, View } from 'react-native';
-import { Text } from 'react-native';
-import axios from 'axios';
+import { TouchableHighlight, View, Text, Button } from 'react-native';
+import useAxios from 'axios-hooks';
 
 import AuthContext from '../context/auth';
 import SummaryInfo from './SummaryInfo';
@@ -85,44 +84,39 @@ const alarms = [
 const Dashboard: () => React$Node = () => {
 	const { server } = useContext(AuthContext);
 	const [refreshing, setRefreshing] = React.useState(false);
-
-	useEffect(() => {
-		getUserLocations();
-	}, []);
-
-	const getUserLocations = async () => {
-		const body = {
-			Action: 'GetUserLocations',
-			Parameters: {}
-		};
-
-		const options = {
-			url: server,
-			method: 'post',
-			data: body,
-			headers: {
-				Accept: 'application/json, text/plain, */*',
-				'Content-Type': 'ecs/json',
-				Action: 'GetUserLocations'
-			}
-		};
-		try {
-			const response = await axios(options);
-			debugger;
-			console.log(`Response: ${response}`);
-		} catch (err) {
-			debugger;
-			console.log(`Error: ${err}`);
-		}
+	const HEADERS = {
+		Accept: 'application/json, text/plain, */*',
+		'Content-Type': 'ecs/json',
+		Action: 'GetUserLocations'
 	};
 
+	const METHODS = {
+		POST: 'POST',
+		GET: 'GET'
+	};
+
+	const body = { Action: 'GetUserLocations', Parameters: {} };
+
+	const options = {
+		url: server,
+		method: METHODS.POST,
+		data: body,
+		headers: HEADERS
+	};
+	const [{ data, loading, error }, refetch] = useAxios(options);
+
 	return (
-		<>
-			<SummaryInfo></SummaryInfo>
+		<View>
+			<Text>DASHBOARD</Text>
+			<Button title='REFRESH' onPress={() => refetch()} />
+			<Text>{JSON.stringify(data, null, 2)}</Text>
+
+			{/* 	{loading && <Text>LOADING...</Text>}*/}
+			{/* <SummaryInfo></SummaryInfo>
 			{alarms.map((alarm) => (
 				<AlarmListItem key={alarm.id} alarm={alarm} />
-			))}
-		</>
+			))} */}
+		</View>
 	);
 };
 
