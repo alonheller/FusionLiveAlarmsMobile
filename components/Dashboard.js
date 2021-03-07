@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TouchableHighlight, View, Text, Button } from 'react-native';
-import useAxios from 'axios-hooks';
 
-import AuthContext from '../context/auth';
+import useData from '../hooks/useData';
 import SummaryInfo from './SummaryInfo';
 import AlarmListItem from './AlarmListItem';
 
@@ -82,36 +81,55 @@ const alarms = [
 ];
 
 const Dashboard: () => React$Node = () => {
-	const { server } = useContext(AuthContext);
 	const [refreshing, setRefreshing] = React.useState(false);
-	const HEADERS = {
-		Accept: 'application/json, text/plain, */*',
-		'Content-Type': 'ecs/json',
-		Action: 'GetUserLocations'
+
+	const [
+		{ data: userLocations, loading: userLocationsLoading, error: userLocationsError },
+		refetchUserLocations
+	] = useData('GetUserLocations', {});
+
+	const [
+		{ data: authenticatedUser, loading: authenticatedUserLoading, error: authenticatedUserError },
+		refetchAuthenticatedUser
+	] = useData('GetAuthenticatedUser', {});
+
+	const [{ data: userSettings, loading: userSettingsLoading, error: userSettingsError }] = useData(
+		'GetUserSettings',
+		{}
+	);
+
+	const [
+		{ data: userLocationsTags, loading: userLocationsTagsLoading, error: userLocationsTagsError }
+	] = useData('GetUserSettings', {});
+
+	const refresh = () => {
+		refetchUserLocations();
+		refetchAuthenticatedUser();
 	};
 
-	const METHODS = {
-		POST: 'POST',
-		GET: 'GET'
+	const refreshLocations = () => {
+		refetchUserLocations();
 	};
-
-	const body = { Action: 'GetUserLocations', Parameters: {} };
-
-	const options = {
-		url: server,
-		method: METHODS.POST,
-		data: body,
-		headers: HEADERS
+	const refreshAuthUser = () => {
+		refetchAuthenticatedUser();
 	};
-	const [{ data, loading, error }, refetch] = useAxios(options);
-
 	return (
 		<View>
 			<Text>DASHBOARD</Text>
-			<Button title='REFRESH' onPress={() => refetch()} />
-			<Text>{JSON.stringify(data, null, 2)}</Text>
+			<Button title='REFRESH All' onPress={() => refresh()} />
+			<Button title='REFRESH USER LOCATIONS' onPress={() => refreshLocations()} />
+			<Button title='REFRESH Auth USER' onPress={() => refreshAuthUser()} />
+			<Text>{JSON.stringify(userLocations?.$id, null, 2)}</Text>
+			<Text>{JSON.stringify(userLocations?.ReturnValue?.$values[0].Name, null, 2)}</Text>
+			<Text>{JSON.stringify(authenticatedUser?.$id, null, 2)}</Text>
+			<Text>{JSON.stringify(authenticatedUser?.ReturnValue?.UserName, null, 2)}</Text>
+			<Text>{JSON.stringify(userSettings?.ReturnValue, null, 2)}</Text>
+			<Text>{JSON.stringify(userLocationsTags?.ReturnValue, null, 2)}</Text>
 
-			{/* 	{loading && <Text>LOADING...</Text>}*/}
+			{(userLocationsLoading ||
+				authenticatedUserLoading ||
+				userSettingsLoading ||
+				userLocationsTagsLoading) && <Text>LOADING...</Text>}
 			{/* <SummaryInfo></SummaryInfo>
 			{alarms.map((alarm) => (
 				<AlarmListItem key={alarm.id} alarm={alarm} />
