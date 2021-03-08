@@ -69,6 +69,7 @@ const Login: () => React$Node = (props) => {
 					style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
 					onChangeText={(text) => setUser(text)}
 					value={user}
+					editable={!isLoading}
 				/>
 			</View>
 
@@ -79,6 +80,7 @@ const Login: () => React$Node = (props) => {
 					onChangeText={(text) => setPassword(text)}
 					value={password}
 					secureTextEntry={true}
+					editable={!isLoading}
 				/>
 			</View>
 
@@ -88,6 +90,7 @@ const Login: () => React$Node = (props) => {
 					style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
 					onChangeText={(text) => setServer(text)}
 					value={server}
+					editable={!isLoading}
 				/>
 			</View>
 
@@ -95,8 +98,9 @@ const Login: () => React$Node = (props) => {
 				<Button
 					title='LOGIN'
 					onPress={() => onLoginClicked()}
-					disabled={user === '' || password === '' || server === ''}
+					disabled={user === '' || password === '' || server === '' || isLoading}
 				/>
+				{isLoading && <ActivityIndicator />}
 			</View>
 		</View>
 	);
