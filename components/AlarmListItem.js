@@ -48,7 +48,7 @@ const AlarmListItem: (props) => React$Node = (props) => {
 					<Text>{AssetName}</Text>
 				</ListItem.Subtitle>
 				<ListItem.Subtitle>
-					<Text>{formatDistance(Date.parse(CreatedOn), new Date())}</Text>
+					<Text>{CreatedOn && formatDistance(Date.parse(CreatedOn), new Date())}</Text>
 				</ListItem.Subtitle>
 			</ListItem.Content>
 		</ListItem>

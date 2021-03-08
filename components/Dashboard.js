@@ -9,7 +9,7 @@ import AlarmListItem from './AlarmListItem';
 
 const alarms = [
 	{
-		id: 1,
+		ID: 1,
 		AssetMeasureName: 'Temperature',
 		LastValue: '32.0 °F',
 		LocationName: "Eran's House",
@@ -18,7 +18,7 @@ const alarms = [
 		status: 'ok'
 	},
 	{
-		id: 2,
+		ID: 2,
 		AssetMeasureName: 'Humidty',
 		LastValue: '16.9 %RH',
 		LocationName: 'Lab',
@@ -27,7 +27,7 @@ const alarms = [
 		status: 'critical'
 	},
 	{
-		id: 3,
+		ID: 3,
 		AssetMeasureName: 'Temperature',
 		LastValue: '29.0 °F',
 		LocationName: "Eran's House",
@@ -36,7 +36,7 @@ const alarms = [
 		status: 'fault'
 	},
 	{
-		id: 4,
+		ID: 4,
 		AssetMeasureName: 'Temperature',
 		LastValue: '10.0 °F',
 		LocationName: "Eran's House",
@@ -45,7 +45,7 @@ const alarms = [
 		status: 'warning'
 	},
 	{
-		id: 5,
+		ID: 5,
 		AssetMeasureName: 'Temperature',
 		LastValue: '10.0 °F',
 		LocationName: "Eran's House",
@@ -54,7 +54,7 @@ const alarms = [
 		status: 'error'
 	},
 	{
-		id: 6,
+		ID: 6,
 		AssetMeasureName: 'Temperature',
 		LastValue: '10.0 °F',
 		LocationName: "Eran's House",
@@ -63,7 +63,7 @@ const alarms = [
 		status: 'error'
 	},
 	{
-		id: 7,
+		ID: 7,
 		AssetMeasureName: 'Temperature',
 		LastValue: '10.0 °F',
 		LocationName: "Eran's House",
@@ -72,7 +72,7 @@ const alarms = [
 		status: 'error'
 	},
 	{
-		id: 8,
+		ID: 8,
 		AssetMeasureName: 'Temperature',
 		LastValue: '10.0 °F',
 		LocationName: "Eran's House",
@@ -170,10 +170,10 @@ const Dashboard: () => React$Node = () => {
 			{[...locationAlarms, ...locationRouterAlarms].map((alarm) => (
 				<AlarmListItem key={alarm.ID} alarm={alarm} />
 			))}
-
+			{/* 
 			{alarms.map((alarm) => (
-				<AlarmListItem key={alarm.id} alarm={alarm} />
-			))}
+				<AlarmListItem key={alarm.ID} alarm={alarm} />
+			))} */}
 		</View>
 	);
 };
