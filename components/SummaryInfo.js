@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { Badge } from 'react-native-elements';
 
-import statusViewsMap from '../utils/statusViewsMap';
+import { statusViewsMap, getBadge, countAlarms } from '../utils/status';
 
 const SummaryInfo: () => React$Node = (props) => {
 	const { alarms, routerAlarms } = props;
@@ -11,92 +11,13 @@ const SummaryInfo: () => React$Node = (props) => {
 	const [warningCounter, setWarningCounter] = useState(0);
 	const [successCounter, setSuccessCounter] = useState(0);
 
-	const getBadge = (statusView) => {
-		switch (statusView) {
-			case statusViewsMap.OK:
-			case statusViewsMap.SNOOZE:
-			case statusViewsMap.BYPASS_ALARM_TYPE:
-			case statusViewsMap.BYPASS:
-			case statusViewsMap.ACK_WARNING:
-			case statusViewsMap.ACK_CRITICAL:
-			case statusViewsMap.ACK_FAULT:
-			case statusViewsMap.ACK_FAULT_OPEN:
-			case statusViewsMap.ACK_FAULT_SHORTED:
-			case statusViewsMap.ACK_FAULT_COMM:
-			case statusViewsMap.ACK_DISCONNECTED: {
-				return 'ok';
-				// break;
-			}
-
-			case statusViewsMap.WARNING: {
-				return 'warning';
-				// break;
-			}
-
-			case statusViewsMap.CRITICAL:
-			case statusViewsMap.ROUTER_POWER_ALERT:
-			case statusViewsMap.ESCALATION_ALERT:
-			case statusViewsMap.FAULT:
-			case statusViewsMap.FAULT_COMM:
-			case statusViewsMap.FAULT_OPEN:
-			case statusViewsMap.FAULT_SHORTED:
-			case statusViewsMap.ROUTER_CHARGING_FAULT: {
-				return 'alarms';
-				// break;
-			}
-
-			case statusViewsMap.DISCONNECTED:
-			case statusViewsMap.ROUTER_DISCONNECTED: {
-				return 'disconnct';
-				// break;
-			}
-		}
-	};
-
 	useEffect(() => {
-		let disconnectionCounterTmp = 0;
-		let errorCounterTmp = 0;
-		let warningCounterTmp = 0;
-		let successCounterTmp = 0;
+		const statuses = countAlarms([...alarms, ...routerAlarms]);
 
-		alarms.forEach((alarm) => {
-			switch (getBadge(alarm.StatusView)) {
-				case 'ok':
-					successCounterTmp = successCounterTmp + 1;
-					break;
-				case 'alarms':
-					errorCounterTmp = errorCounterTmp + 1;
-					break;
-				case 'disconnct':
-					disconnectionCounterTmp = disconnectionCounterTmp + 1;
-					break;
-				case 'warning':
-					warningCounterTmp = warningCounterTmp + 1;
-					break;
-			}
-		});
-
-		routerAlarms.forEach((alarm) => {
-			switch (getBadge(alarm.StatusView)) {
-				case 'ok':
-					successCounterTmp = successCounterTmp + 1;
-					break;
-				case 'alarms':
-					errorCounterTmp = errorCounterTmp + 1;
-					break;
-				case 'disconnct':
-					disconnectionCounterTmp = disconnectionCounterTmp + 1;
-					break;
-				case 'warning':
-					warningCounterTmp = warningCounterTmp + 1;
-					break;
-			}
-		});
-
-		setDisconnectionCounter(disconnectionCounterTmp);
-		setErrorCounter(errorCounterTmp);
-		setWarningCounter(warningCounterTmp);
-		setSuccessCounter(successCounterTmp);
+		setDisconnectionCounter(statuses.disconnectionCounterTmp);
+		setErrorCounter(statuses.errorCounterTmp);
+		setWarningCounter(statuses.warningCounterTmp);
+		setSuccessCounter(statuses.successCounterTmp);
 	}, [alarms, routerAlarms]);
 
 	return (
