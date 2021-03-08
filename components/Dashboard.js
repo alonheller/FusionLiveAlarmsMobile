@@ -10,74 +10,74 @@ import AlarmListItem from './AlarmListItem';
 const alarms = [
 	{
 		id: 1,
-		assetMeasure: 'Temperature',
-		value: '32.0 °F',
-		location: "Eran's House",
-		asset: 'Garage Cooler',
-		time: '2d 7h 45m 14s',
+		AssetMeasureName: 'Temperature',
+		LastValue: '32.0 °F',
+		LocationName: "Eran's House",
+		AssetName: 'Garage Cooler',
+		CreatedOn: '2020-08-24T18:00:04Z',
 		status: 'ok'
 	},
 	{
 		id: 2,
-		assetMeasure: 'Humidty',
-		value: '16.9 %RH',
-		location: 'Lab',
-		asset: 'Clean Room',
-		time: '12m 24s',
+		AssetMeasureName: 'Humidty',
+		LastValue: '16.9 %RH',
+		LocationName: 'Lab',
+		AssetName: 'Clean Room',
+		CreatedOn: '2020-08-24T18:00:04Z',
 		status: 'critical'
 	},
 	{
 		id: 3,
-		assetMeasure: 'Temperature',
-		value: '29.0 °F',
-		location: "Eran's House",
-		asset: 'Garage Cooler',
-		time: '2d 7h 45m 14s',
+		AssetMeasureName: 'Temperature',
+		LastValue: '29.0 °F',
+		LocationName: "Eran's House",
+		AssetName: 'Garage Cooler',
+		CreatedOn: '2020-08-24T18:00:04Z',
 		status: 'fault'
 	},
 	{
 		id: 4,
-		assetMeasure: 'Temperature',
-		value: '10.0 °F',
-		location: "Eran's House",
-		asset: 'Garage Cooler',
-		time: '2d 7h 45m 14s',
+		AssetMeasureName: 'Temperature',
+		LastValue: '10.0 °F',
+		LocationName: "Eran's House",
+		AssetName: 'Garage Cooler',
+		CreatedOn: '2020-08-24T18:00:04Z',
 		status: 'warning'
 	},
 	{
 		id: 5,
-		assetMeasure: 'Temperature',
-		value: '10.0 °F',
-		location: "Eran's House",
-		asset: 'Garage Cooler',
-		time: '2d 7h 45m 14s',
+		AssetMeasureName: 'Temperature',
+		LastValue: '10.0 °F',
+		LocationName: "Eran's House",
+		AssetName: 'Garage Cooler',
+		CreatedOn: '2020-08-24T18:00:04Z',
 		status: 'error'
 	},
 	{
 		id: 6,
-		assetMeasure: 'Temperature',
-		value: '10.0 °F',
-		location: "Eran's House",
-		asset: 'Garage Cooler',
-		time: '2d 7h 45m 14s',
+		AssetMeasureName: 'Temperature',
+		LastValue: '10.0 °F',
+		LocationName: "Eran's House",
+		AssetName: 'Garage Cooler',
+		CreatedOn: '2020-08-24T18:00:04Z',
 		status: 'error'
 	},
 	{
 		id: 7,
-		assetMeasure: 'Temperature',
-		value: '10.0 °F',
-		location: "Eran's House",
-		asset: 'Garage Cooler',
-		time: '2d 7h 45m 14s',
+		AssetMeasureName: 'Temperature',
+		LastValue: '10.0 °F',
+		LocationName: "Eran's House",
+		AssetName: 'Garage Cooler',
+		CreatedOn: '2020-08-24T18:00:04Z',
 		status: 'error'
 	},
 	{
 		id: 8,
-		assetMeasure: 'Temperature',
-		value: '10.0 °F',
-		location: "Eran's House",
-		asset: 'Garage Cooler',
-		time: '2d 7h 45m 14s',
+		AssetMeasureName: 'Temperature',
+		LastValue: '10.0 °F',
+		LocationName: "Eran's House",
+		AssetName: 'Garage Cooler',
+		CreatedOn: '2020-08-24T18:00:04Z',
 		status: 'error'
 	}
 ];
@@ -165,30 +165,15 @@ const Dashboard: () => React$Node = () => {
 	return (
 		<View>
 			<SummaryInfo alarms={locationAlarms} routerAlarms={locationRouterAlarms}></SummaryInfo>
-			<Text>DASHBOARD</Text>
-			{loading && <Text>LOADING...</Text>}
+			{/* <Text>{JSON.stringify(locationAlarms, null, 2)}</Text> */}
 
-			<Text>{JSON.stringify(locationAlarms.length, null, 2)}</Text>
-			<Text>{JSON.stringify(locationRouterAlarms.length, null, 2)}</Text>
+			{[...locationAlarms, ...locationRouterAlarms].map((alarm) => (
+				<AlarmListItem key={alarm.ID} alarm={alarm} />
+			))}
 
-			<Text>{JSON.stringify(locationAlarms, null, 2)}</Text>
-			<Text>{JSON.stringify(locationRouterAlarms, null, 2)}</Text>
-
-			{/* <Text>{JSON.stringify(userLocations, null, 2)}</Text> */}
-
-			{/* 	<Button title='REFRESH All' onPress={() => refresh()} />
-			<Button title='REFRESH USER LOCATIONS' onPress={() => refreshLocations()} />
-			<Button title='REFRESH Auth USER' onPress={() => refreshAuthUser()} />
-			<Text>{JSON.stringify(userLocations?.$id, null, 2)}</Text>
-			
-			<Text>{JSON.stringify(authenticatedUser?.$id, null, 2)}</Text>
-			<Text>{JSON.stringify(authenticatedUser?.ReturnValue?.UserName, null, 2)}</Text>
-			<Text>{JSON.stringify(userSettings?.ReturnValue, null, 2)}</Text>
-			<Text>{JSON.stringify(userLocationsTags?.ReturnValue, null, 2)}</Text> */}
-
-			{/* 			{alarms.map((alarm) => (
+			{alarms.map((alarm) => (
 				<AlarmListItem key={alarm.id} alarm={alarm} />
-			))} */}
+			))}
 		</View>
 	);
 };
