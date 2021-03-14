@@ -1,8 +1,9 @@
 import React from 'react';
-import { TouchableHighlight } from 'react-native';
+import { TouchableHighlight, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native';
 import { ListItem, Icon } from 'react-native-elements';
 import { formatDistance } from 'date-fns';
+import ColoredLine from './ColoredLine';
 
 /* 
 https://oblador.github.io/react-native-vector-icons/
@@ -29,50 +30,102 @@ const AlarmListItem: (props) => React$Node = (props) => {
 	return (
 		<ListItem
 			Component={TouchableHighlight}
-			containerStyle={{}}
+			containerStyle={{
+				backgroundColor: '#292D39',
+				marginLeft: 12,
+				marginRight: 12,
+				marginTop: 8,
+				marginBottom: 8,
+				borderRadius: 7
+			}}
 			disabledStyle={{ opacity: 0.5 }}
 			onLongPress={() => console.log('onLongPress()')}
 			onPress={() => console.log('onLongPress()')}
-			pad={20}>
-			<Icon name={getIconName(status)} />
+			pad={0}>
 			<ListItem.Content>
-				<ListItem.Title>
-					<Text>
-						{AssetMeasureName} {LastValue}
-					</Text>
-				</ListItem.Title>
-				<ListItem.Subtitle>
-					<Text>{LocationName}</Text>
-				</ListItem.Subtitle>
-				<ListItem.Subtitle>
-					<Text>{AssetName}</Text>
-				</ListItem.Subtitle>
-				<ListItem.Subtitle>
-					<Text>{CreatedOn && formatDistance(Date.parse(CreatedOn), new Date())}</Text>
-				</ListItem.Subtitle>
+				<View style={styles.row}>
+					<View style={styles.iconContainer}>
+						<Icon name={getIconName(status)} color='#00aced' size={42}></Icon>
+					</View>
+					<View style={styles.locationContainer}>
+						<ListItem.Title style={[styles.mainColor, styles.verticalLineSpace]}>
+							{LocationName}
+						</ListItem.Title>
+						<ListItem.Subtitle style={styles.subColor}>{AssetName}</ListItem.Subtitle>
+					</View>
+					<View style={styles.valueContainer}>
+						<ListItem.Title style={[styles.mainColor, styles.value]}>{LastValue}</ListItem.Title>
+						<ListItem.Subtitle style={styles.subColor}>{AssetMeasureName}</ListItem.Subtitle>
+					</View>
+				</View>
+				<View style={styles.horizontalLine} />
+				<View style={[styles.row, styles.statusContainer]}>
+					<ListItem.Subtitle style={[styles.subColor, styles.statusCaption]}>
+						Escalation Alert
+					</ListItem.Subtitle>
+					<ListItem.Subtitle style={styles.subColor}>
+						{CreatedOn && formatDistance(Date.parse(CreatedOn), new Date())}
+					</ListItem.Subtitle>
+				</View>
 			</ListItem.Content>
 		</ListItem>
 	);
 };
 
-const styles = {
-	container: {
-		marginTop: 48,
-		flex: 1
+const styles = StyleSheet.create({
+	row: {
+		flex: 1,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		flexWrap: 'nowrap'
 	},
-	headerStyle: {
-		fontSize: 36,
-		textAlign: 'center',
-		fontWeight: '100',
-		marginBottom: 24
+	iconContainer: {
+		flexBasis: 50
 	},
-	elementsContainer: {
-		backgroundColor: '#ecf5fd',
-		marginLeft: 24,
-		marginRight: 24,
-		marginBottom: 24
+	locationContainer: {
+		flex: 1,
+		flexDirection: 'column'
+	},
+	valueContainer: {
+		flexDirection: 'column',
+		alignItems: 'flex-end'
+	},
+	value: {
+		backgroundColor: 'red',
+		color: 'red'
+	},
+	verticalLineSpace: {
+		marginBottom: 8
+	},
+	mainColor: {
+		color: '#ECEFF1'
+	},
+	subColor: {
+		color: '#808491'
+	},
+	locationFont: {
+		fontSize: 16,
+		fontWeight: 'bold'
+	},
+	value: {
+		fontWeight: '600',
+		fontSize: 25
+	},
+	horizontalLine: {
+		marginTop: 7,
+		marginBottom: 7,
+		borderBottomColor: '#434753',
+		borderBottomWidth: 1,
+		width: '100%'
+	},
+	statusCaption: {
+		textTransform: 'uppercase'
+	},
+	statusContainer: {
+		justifyContent: 'space-between',
+		width: '100%'
 	}
-};
+});
 
 export default AlarmListItem;
 
