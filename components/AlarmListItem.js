@@ -3,7 +3,6 @@ import { TouchableHighlight, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native';
 import { ListItem, Icon } from 'react-native-elements';
 import { formatDistance } from 'date-fns';
-import ColoredLine from './ColoredLine';
 
 /* 
 https://oblador.github.io/react-native-vector-icons/
