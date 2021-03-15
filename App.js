@@ -43,7 +43,7 @@ const App: () => React$Node = (props) => {
 
 const styles = StyleSheet.create({
 	scrollView: {
-		backgroundColor: Colors.lighter
+		backgroundColor: '#191C26'
 	}
 });
 

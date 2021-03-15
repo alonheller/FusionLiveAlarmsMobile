@@ -5,6 +5,7 @@ import axios from 'axios';
 import AuthContext from '../context/auth';
 import generateApiObject from '../utils/api';
 import SummaryInfo from './SummaryInfo';
+import Header from './Header';
 import AlarmListItem from './AlarmListItem';
 
 const alarms = [
@@ -164,6 +165,7 @@ const Dashboard: () => React$Node = () => {
 
 	return (
 		<View>
+			<Header />
 			<SummaryInfo alarms={locationAlarms} routerAlarms={locationRouterAlarms}></SummaryInfo>
 			{/* <Text>{JSON.stringify(locationAlarms, null, 2)}</Text> */}
 
