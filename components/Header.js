@@ -1,13 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image } from 'react-native';
 import { Icon } from 'react-native-elements';
+import { format } from 'date-fns';
 
-const Header: () => React$Node = () => {
+const Header: () => React$Node = ({ lastUpdate }) => {
+	const [updated, setUpdated] = useState('---');
+
+	useEffect(() => {
+		if (lastUpdate instanceof Date && !isNaN(lastUpdate.valueOf())) {
+			setUpdated(format(lastUpdate, 'MM/dd/yyyy hh:mm:SS aa'));
+		}
+	}, [lastUpdate]);
+
 	return (
 		<View>
 			<View style={styles.elementsContainer}>
 				<Text style={styles.title}>ALARMS</Text>
-				<Text style={styles.subTitle}>Last update on: 03/10/2021 08:45:01 PM</Text>
+				<Text style={styles.subTitle}>Last update on: {updated}</Text>
+				{/* 03/10/2021 08:45:01 PM  */}
 			</View>
 			<View style={styles.logoContainer}>
 				<Image style={styles.tinyLogo} source={require('./logo.png')} />

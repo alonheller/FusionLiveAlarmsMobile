@@ -94,6 +94,7 @@ const Dashboard: () => React$Node = () => {
 	const [prerequisitesInitialized, setPrerequisitesInitialized] = useState(false);
 	const [locationAlarms, setLocationAlarms] = useState([]);
 	const [locationRouterAlarms, setLocationRouterAlarms] = useState([]);
+	const [lastUpdate, setlastUpdate] = useState('');
 
 	useEffect(() => {
 		async function fetchInitialData() {
@@ -159,6 +160,7 @@ const Dashboard: () => React$Node = () => {
 					Alert.alert('Error on get alarms');
 				} finally {
 					setLoading(false);
+					setlastUpdate(new Date());
 				}
 			}
 			fetchAlarms();
@@ -169,7 +171,7 @@ const Dashboard: () => React$Node = () => {
 
 	return (
 		<View>
-			<Header />
+			<Header lastUpdate={lastUpdate} />
 			<SummaryInfo alarms={locationAlarms} routerAlarms={locationRouterAlarms}></SummaryInfo>
 			{/* <Text>{JSON.stringify(locationAlarms, null, 2)}</Text> */}
 

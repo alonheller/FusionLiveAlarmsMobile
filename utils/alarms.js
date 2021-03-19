@@ -2,7 +2,7 @@ import { statusViewsMap, statusView } from './status';
 import { DBConstants, Measures, defaults, statusCodesMap } from './constants';
 
 export const parseAlarms = (alarms, showWarnings) => {
-	const parsedAlarms = [];
+	let parsedAlarms = [];
 	const now = new Date();
 
 	// TODO: should come from settings
@@ -41,7 +41,154 @@ export const parseAlarms = (alarms, showWarnings) => {
 			parsedAlarms.push(item);
 		}
 	});
+	parsedAlarms = sortAlarms(parsedAlarms, 'Duration', 'Priority');
+
 	return parsedAlarms;
+};
+
+const namesComparer = (item1, item2) => {
+	const digitRegex = /^\d/;
+	const alphabetRegex = /^[a-zA-Z]/;
+	const symbolRegex = /^[^\w\s]/;
+
+	const a = item1['Name'].toLowerCase();
+	const b = item2['Name'].toLowerCase();
+	const scoreA =
+		+symbolRegex.test(a) * 1 || +digitRegex.test(a) * 10 || +alphabetRegex.test(a) * 100;
+	const scoreB =
+		+symbolRegex.test(b) * 1 || +digitRegex.test(b) * 10 || +alphabetRegex.test(b) * 100;
+
+	if (scoreA !== scoreB) {
+		return scoreA - scoreB;
+	}
+
+	if (a < b) {
+		return -1;
+	} else if (a > b) {
+		return 1;
+	}
+
+	return 0;
+};
+
+const labelsComparer = (item1, item2) => {
+	const digitRegex = /^\d/;
+	const alphabetRegex = /^[a-zA-Z]/;
+	const symbolRegex = /^[^\w\s]/;
+
+	const a = item1['label'].toLowerCase();
+	const b = item2['label'].toLowerCase();
+	const scoreA =
+		+symbolRegex.test(a) * 1 || +digitRegex.test(a) * 10 || +alphabetRegex.test(a) * 100;
+	const scoreB =
+		+symbolRegex.test(b) * 1 || +digitRegex.test(b) * 10 || +alphabetRegex.test(b) * 100;
+
+	if (scoreA !== scoreB) {
+		return scoreA - scoreB;
+	}
+
+	if (a < b) {
+		return -1;
+	} else if (a > b) {
+		return 1;
+	}
+
+	return 0;
+};
+
+function naturalCompare(a, b, isDesc): number {
+	const ax = [];
+	const bx = [];
+
+	if (!a) {
+		return 1000;
+	}
+
+	if (!b) {
+		return -1000;
+	}
+
+	if (!(a && b)) {
+		return 0;
+	}
+
+	a.replace(/(\d+)|(\D+)/g, function (_, $1, $2) {
+		ax.push([$1 || Infinity, $2 || '']);
+	});
+	b.replace(/(\d+)|(\D+)/g, function (_, $1, $2) {
+		bx.push([$1 || Infinity, $2 || '']);
+	});
+
+	while (ax.length && bx.length) {
+		const an = ax.shift();
+		const bn = bx.shift();
+		const nn = an[0] - bn[0] || an[1].localeCompare(bn[1]);
+		if (nn) {
+			return nn;
+		}
+	}
+
+	return isDesc ? bx.length - ax.length : ax.length - bx.length;
+}
+
+const sortAlarms = (arr, byField = 'Name', byScndField = null, isDesc = false) => {
+	if (!(arr && arr.length > 0)) {
+		return arr;
+	}
+
+	if (!arr[0].hasOwnProperty(byField)) {
+		return arr;
+	}
+
+	if (byField === 'Name' && !byScndField) {
+		return arr.sort(namesComparer);
+	}
+
+	if (byField === 'label' && !byScndField) {
+		return arr.sort(labelsComparer);
+	}
+
+	return arr.sort((item1, item2) => {
+		if (typeof item1[byField] === 'string') {
+			let res = naturalCompare(item1[byField], item2[byField], isDesc);
+			if (res === 0 && byScndField && byScndField.length > 0) {
+				if (typeof item1[byScndField] === 'string') {
+					res = naturalCompare(item1[byScndField], item2[byScndField], isDesc);
+				} else {
+					res = 0;
+					if (item1[byField] > item2[byField]) {
+						res = isDesc ? -1 : 1;
+					}
+					if (item1[byField] < item2[byField]) {
+						res = isDesc ? 1 : -1;
+					}
+				}
+			}
+			return res;
+		} else {
+			if (item1[byField] > item2[byField]) {
+				return isDesc ? -1 : 1;
+			}
+			if (item1[byField] < item2[byField]) {
+				return isDesc ? 1 : -1;
+			}
+
+			if (byScndField && byScndField.length > 0) {
+				if (typeof item1[byScndField] === 'string') {
+					return naturalCompare(item1[byScndField], item2[byScndField], isDesc);
+				} else {
+					if (item1[byScndField] > item2[byScndField]) {
+						return 1;
+					}
+					if (item1[byScndField] < item2[byScndField]) {
+						return -1;
+					}
+				}
+			}
+
+			return 0;
+		}
+	});
 };
 
 const parseDate = (value, args?) => {
