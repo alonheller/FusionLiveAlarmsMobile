@@ -17,7 +17,6 @@ const Header: () => React$Node = ({ lastUpdate }) => {
 			<View style={styles.elementsContainer}>
 				<Text style={styles.title}>ALARMS</Text>
 				<Text style={styles.subTitle}>Last update on: {updated}</Text>
-				{/* 03/10/2021 08:45:01 PM  */}
 			</View>
 			<View style={styles.logoContainer}>
 				<Image style={styles.tinyLogo} source={require('./logo.png')} />
