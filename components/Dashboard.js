@@ -7,6 +7,7 @@ import generateApiObject from '../utils/api';
 import SummaryInfo from './SummaryInfo';
 import Header from './Header';
 import AlarmListItem from './AlarmListItem';
+import { parseAlarms } from '../utils/alarms';
 
 const alarms = [
 	{
@@ -148,8 +149,11 @@ const Dashboard: () => React$Node = () => {
 						axiosOptionsLocationAlarms,
 						axiosOptionsLocationRouterAlarms
 					]);
-					setLocationAlarms(responses[0].data?.ReturnValue?.$values);
-					setLocationRouterAlarms(responses[1].data?.ReturnValue?.$values);
+					setLocationAlarms(parseAlarms(responses[0].data?.ReturnValue?.$values), showWarnings);
+					setLocationRouterAlarms(
+						parseAlarms(responses[1].data?.ReturnValue?.$values),
+						showWarnings
+					);
 				} catch (err) {
 					console.log(err);
 					Alert.alert('Error on get alarms');
@@ -170,12 +174,8 @@ const Dashboard: () => React$Node = () => {
 			{/* <Text>{JSON.stringify(locationAlarms, null, 2)}</Text> */}
 
 			{[...locationAlarms, ...locationRouterAlarms].map((alarm) => (
-				<AlarmListItem key={alarm.ID} alarm={alarm} />
+				<AlarmListItem key={alarm.$id} alarm={alarm} />
 			))}
-			{/* 
-			{alarms.map((alarm) => (
-				<AlarmListItem key={alarm.ID} alarm={alarm} />
-			))} */}
 		</View>
 	);
 };

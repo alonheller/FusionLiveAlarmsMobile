@@ -8,7 +8,15 @@ import { formatDistance } from 'date-fns';
 https://oblador.github.io/react-native-vector-icons/
 */
 const AlarmListItem: (props) => React$Node = (props) => {
-	const { AssetMeasureName, LastValue, LocationName, AssetName, CreatedOn, status } = props.alarm;
+	const {
+		AssetMeasureName,
+		LastValueParsed,
+		statusViewParsed,
+		LocationName,
+		AssetName,
+		CreatedOn,
+		status
+	} = props.alarm;
 
 	const getIconName = (status) => {
 		switch (status) {
@@ -22,7 +30,7 @@ const AlarmListItem: (props) => React$Node = (props) => {
 			case 'ok':
 				return 'warning';
 			default:
-				return 'questioncircleo';
+				return 'warning';
 		}
 	};
 
@@ -53,14 +61,16 @@ const AlarmListItem: (props) => React$Node = (props) => {
 						<ListItem.Subtitle style={styles.subColor}>{AssetName}</ListItem.Subtitle>
 					</View>
 					<View style={styles.valueContainer}>
-						<ListItem.Title style={[styles.mainColor, styles.value]}>{LastValue}</ListItem.Title>
+						<ListItem.Title style={[styles.mainColor, styles.value]}>
+							{LastValueParsed}
+						</ListItem.Title>
 						<ListItem.Subtitle style={styles.subColor}>{AssetMeasureName}</ListItem.Subtitle>
 					</View>
 				</View>
 				<View style={styles.horizontalLine} />
 				<View style={[styles.row, styles.statusContainer]}>
 					<ListItem.Subtitle style={[styles.subColor, styles.statusCaption]}>
-						Escalation Alert
+						{statusViewParsed}
 					</ListItem.Subtitle>
 					<ListItem.Subtitle style={styles.subColor}>
 						{CreatedOn && formatDistance(Date.parse(CreatedOn), new Date())}

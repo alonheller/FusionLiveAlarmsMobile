@@ -1,0 +1,12 @@
+Check user status on login - app.components.ts 180
+
+Handle multi roots
+
+// TODO: should come from settings
+  const showAcksBypassAndSnooze = true;
+  const delayAlarmsInSeconds = 0;
+
+
+fix function parseDate
+
+fix function parseDuraion
