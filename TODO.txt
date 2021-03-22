@@ -12,7 +12,9 @@ fix function parseDate
 fix function parseDuraion
 
 Alarms are not the same as in the web, router alarms should be also sorted
-
+  web: 160 alarms
+  mobile 158 alarms
+  
 badges yellow is not the same counter
 
 install fonts for android

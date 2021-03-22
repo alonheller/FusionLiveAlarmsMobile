@@ -23,26 +23,22 @@ const App: () => React$Node = (props) => {
 	const value = { isAuthorized, setIsAuthorized, server, setServer };
 
 	return (
-		<>
-			<SafeAreaProvider>
-				<StatusBar barStyle='dark-content' />
-				<SafeAreaView>
-					<ScrollView contentInsetAdjustmentBehavior='automatic' style={styles.scrollView}>
-						<AuthContext.Provider value={value}>
-							<NativeRouter>
-								<Route exact path='/' component={Login} />
-								<PrivateRoute path='/dashboard' component={Dashboard} />
-							</NativeRouter>
-						</AuthContext.Provider>
-					</ScrollView>
-				</SafeAreaView>
-			</SafeAreaProvider>
-		</>
+		<SafeAreaProvider>
+			<StatusBar barStyle='dark-content' />
+			<SafeAreaView style={styles.safeAreaView}>
+				<AuthContext.Provider value={value}>
+					<NativeRouter>
+						<Route exact path='/' component={Login} />
+						<PrivateRoute path='/dashboard' component={Dashboard} />
+					</NativeRouter>
+				</AuthContext.Provider>
+			</SafeAreaView>
+		</SafeAreaProvider>
 	);
 };
 
 const styles = StyleSheet.create({
-	scrollView: {
+	safeAreaView: {
 		backgroundColor: '#191C26'
 	}
 });

@@ -8,7 +8,7 @@ const Header: () => React$Node = ({ lastUpdate }) => {
 
 	useEffect(() => {
 		if (lastUpdate instanceof Date && !isNaN(lastUpdate.valueOf())) {
-			setUpdated(format(lastUpdate, 'MM/dd/yyyy hh:mm:SS aa'));
+			setUpdated(format(lastUpdate, 'MM/dd/yyyy hh:mm:ss aa'));
 		}
 	}, [lastUpdate]);
 

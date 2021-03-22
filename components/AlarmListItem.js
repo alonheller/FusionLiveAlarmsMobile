@@ -18,7 +18,7 @@ const AlarmListItem: (props) => React$Node = (props) => {
 		status,
 		StatusViewIcon,
 		StatusViewColor
-	} = props.alarm;
+	} = props.item;
 
 	return (
 		<ListItem

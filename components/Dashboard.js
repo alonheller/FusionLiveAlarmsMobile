@@ -1,5 +1,16 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { TouchableHighlight, View, Text, Button, Alert } from 'react-native';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
+import {
+	TouchableHighlight,
+	View,
+	Text,
+	Button,
+	Alert,
+	ScrollView,
+	RefreshControl,
+	FlatList,
+	SafeAreaView,
+	StyleSheet
+} from 'react-native';
 import axios from 'axios';
 
 import AuthContext from '../context/auth';
@@ -133,53 +144,73 @@ const Dashboard: () => React$Node = () => {
 
 	useEffect(() => {
 		if (prerequisitesInitialized) {
-			const showWarnings = authenticatedUser.ShowWarnings;
-			// TODO: handle multi roots
-			const locationID = userLocations[0].ID;
-
-			async function fetchAlarms() {
-				setLoading(true);
-				const axiosOptionsLocationAlarms = axios(
-					generateApiObject(server, 'GetLocationAlarms', { locationID, showWarnings })
-				);
-				const axiosOptionsLocationRouterAlarms = axios(
-					generateApiObject(server, 'GetLocationRoutersAlarms', { locationID, showWarnings })
-				);
-				try {
-					const responses = await axios.all([
-						axiosOptionsLocationAlarms,
-						axiosOptionsLocationRouterAlarms
-					]);
-					setLocationAlarms(parseAlarms(responses[0].data?.ReturnValue?.$values), showWarnings);
-					setLocationRouterAlarms(
-						parseAlarms(responses[1].data?.ReturnValue?.$values),
-						showWarnings
-					);
-				} catch (err) {
-					console.log(err);
-					Alert.alert('Error on get alarms');
-				} finally {
-					setLoading(false);
-					setlastUpdate(new Date());
-				}
-			}
 			fetchAlarms();
 		}
 	}, [prerequisitesInitialized]);
 
-	console.log('RENDERING DASHBOARD');
+	const fetchAlarms = useCallback(async () => {
+		setLoading(true);
+		const showWarnings = authenticatedUser.ShowWarnings;
+		// TODO: handle multi roots
+		const locationID = userLocations[0].ID;
+
+		const axiosOptionsLocationAlarms = axios(
+			generateApiObject(server, 'GetLocationAlarms', { locationID, showWarnings })
+		);
+		const axiosOptionsLocationRouterAlarms = axios(
+			generateApiObject(server, 'GetLocationRoutersAlarms', { locationID, showWarnings })
+		);
+		try {
+			const responses = await axios.all([
+				axiosOptionsLocationAlarms,
+				axiosOptionsLocationRouterAlarms
+			]);
+			setLocationAlarms(parseAlarms(responses[0].data?.ReturnValue?.$values), showWarnings);
+			setLocationRouterAlarms(parseAlarms(responses[1].data?.ReturnValue?.$values), showWarnings);
+		} catch (err) {
+			console.log(err);
+			Alert.alert('Error on get alarms');
+		} finally {
+			setLoading(false);
+			console.log(`Setting last update: ${new Date()}`);
+			setlastUpdate(new Date());
+		}
+	});
+
+	const handleRefresh = () => {
+		fetchAlarms();
+	};
 
 	return (
-		<View>
-			<Header lastUpdate={lastUpdate} />
-			<SummaryInfo alarms={locationAlarms} routerAlarms={locationRouterAlarms}></SummaryInfo>
-			{/* <Text>{JSON.stringify(locationAlarms, null, 2)}</Text> */}
-
-			{[...locationAlarms, ...locationRouterAlarms].map((alarm) => (
-				<AlarmListItem key={alarm.$id} alarm={alarm} />
-			))}
-		</View>
+		<SafeAreaView style={StyleSheet.container}>
+			<FlatList
+				ListHeaderComponent={
+					<>
+						<Header lastUpdate={lastUpdate} />
+						<SummaryInfo alarms={locationAlarms} routerAlarms={locationRouterAlarms} />
+					</>
+				}
+				data={[...locationAlarms, ...locationRouterAlarms]}
+				renderItem={AlarmListItem}
+				keyExtractor={(alarm) => alarm.$id}
+				refreshControl={
+					<RefreshControl
+						refreshing={loading}
+						onRefresh={handleRefresh}
+						tintColor='#FFFFFF'
+						colors={['#FFFFFF']}
+					/>
+				}
+			/>
+		</SafeAreaView>
 	);
 };
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		marginTop: 20
+	}
+});
 
 export default Dashboard;
