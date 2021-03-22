@@ -24,7 +24,9 @@ export const parseAlarms = (alarms, showWarnings) => {
 				item.StatusCode !== statusCodesMap.DISCONNECTED ? formatLogValue(item) : '---';
 			item.StatusTimestampDurationParsed = parseDuraion(duration);
 			item.statusViewParsed = getStatusViewName(item.StatusView);
-			item.StatusViewIcon = getStatusViewIcon(item.StatusView);
+			const statusView = getStatusView(item.StatusView);
+			item.StatusViewIcon = statusView?.statusIcon;
+			item.StatusViewColor = statusView?.color;
 			/* item.Style = {
 				backgroundColor: this.getBGColor(item.StatusView),
 				color: '#FFFFFF',
@@ -447,31 +449,31 @@ const getStatusViewName = (statusView, statusType = 0, showWarnings = true) => {
 	return statusName;
 };
 
-const getStatusViewIcon = (statusViewCodeTmp, statusType = 0, showWarnings = true) => {
+const getStatusView = (statusViewCodeTmp, statusType = 0, showWarnings = true) => {
 	if (statusViewCodeTmp === statusViewsMap.WARNING && !showWarnings) {
 		statusViewCodeTmp = statusViewsMap.OK;
 	}
 
 	switch (statusType) {
 		case 0: {
-			return statusView[statusViewCodeTmp] ? statusView[statusViewCodeTmp].statusIcon : undefined;
+			return statusView[statusViewCodeTmp] ? statusView[statusViewCodeTmp] : undefined;
 		}
 
 		case 1: {
 			switch (statusViewCodeTmp) {
 				case 0: {
-					return statusView[100].statusIcon; // OK
+					return statusView[100]; // OK
 				}
 				case 1: {
-					return statusView[400].statusIcon; // CRITICAL
+					return statusView[400]; // CRITICAL
 				}
 
 				case 2: {
-					return statusView[500].statusIcon; // FAULT
+					return statusView[500]; // FAULT
 				}
 
 				case 3: {
-					return statusView[900].statusIcon; // DISCONNECTED
+					return statusView[900]; // DISCONNECTED
 				}
 
 				default: {
@@ -481,7 +483,7 @@ const getStatusViewIcon = (statusViewCodeTmp, statusType = 0, showWarnings = tru
 		}
 
 		case 2: {
-			return statusView[statusViewCodeTmp] ? statusView[statusViewCodeTmp].statusIcon : undefined;
+			return statusView[statusViewCodeTmp] ? statusView[statusViewCodeTmp] : undefined;
 		}
 
 		default: {

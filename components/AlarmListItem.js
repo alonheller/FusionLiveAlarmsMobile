@@ -3,7 +3,7 @@ import { TouchableHighlight, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native';
 import { ListItem, Icon } from 'react-native-elements';
 import { formatDistance } from 'date-fns';
-
+import { getStatusViewColor, getStatusViewIcon } from '../utils/alarms';
 /* 
 https://oblador.github.io/react-native-vector-icons/
 */
@@ -15,24 +15,10 @@ const AlarmListItem: (props) => React$Node = (props) => {
 		LocationName,
 		AssetName,
 		CreatedOn,
-		status
+		status,
+		StatusViewIcon,
+		StatusViewColor
 	} = props.alarm;
-
-	const getIconName = (status) => {
-		switch (status) {
-			case 'fault':
-				return 'disabled-by-default';
-			case 'warning':
-				return 'warning';
-			case 'critical':
-			case 'error':
-				return 'error-outline';
-			case 'ok':
-				return 'warning';
-			default:
-				return 'warning';
-		}
-	};
 
 	return (
 		<ListItem
@@ -52,7 +38,7 @@ const AlarmListItem: (props) => React$Node = (props) => {
 			<ListItem.Content>
 				<View style={styles.row}>
 					<View style={styles.iconContainer}>
-						<Icon name={getIconName(status)} color='#00aced' size={42}></Icon>
+						<Icon name={StatusViewIcon} color={StatusViewColor} size={42}></Icon>
 					</View>
 					<View style={styles.locationContainer}>
 						<ListItem.Title style={[styles.mainColor, styles.verticalLineSpace]}>
