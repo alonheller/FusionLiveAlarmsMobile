@@ -1,18 +1,43 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useHistory } from 'react-router-native';
-import AuthContext from '../context/auth';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import axios from 'axios';
+
+import AuthContext from '../context/auth';
+import { USER_KEY, PASSWORD_KEY, SERVER_KEY } from '../utils/constants';
 
 const Login: () => React$Node = (props) => {
 	const history = useHistory();
 	const { isAuthorized, setIsAuthorized, server, setServer } = useContext(AuthContext);
-	const [user, setUser] = useState('admin');
-	const [password, setPassword] = useState('admin');
+	const [user, setUser] = useState('');
+	const [password, setPassword] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
+	const [initialized, setInitialized] = useState(false);
 
-	const onLoginClicked = async () => {
+	useEffect(() => {
+		getCredentials = async () => {
+			const user = await AsyncStorage.getItem(USER_KEY);
+			const password = await AsyncStorage.getItem(PASSWORD_KEY);
+			const server = await AsyncStorage.getItem(SERVER_KEY);
+
+			user !== null && setUser(user);
+			password !== null && setPassword(password);
+			user !== null && setServer(server);
+			setInitialized(true);
+		};
+
+		getCredentials();
+	}, []);
+
+	useEffect(() => {
+		if (initialized && user !== '' && password !== '' && server !== '') {
+			login();
+		}
+	}, [initialized]);
+
+	const login = async () => {
 		setIsLoading(true);
 		setIsAuthorized(false);
 		const body = {
@@ -46,6 +71,9 @@ const Login: () => React$Node = (props) => {
 
 			setIsLoading(false);
 			if (accountStatus === 3 && response.status === 200) {
+				storeData(USER_KEY, user);
+				storeData(PASSWORD_KEY, password);
+				storeData(SERVER_KEY, server);
 				setIsAuthorized(true);
 				history.push('/dashboard');
 			} else {
@@ -59,6 +87,18 @@ const Login: () => React$Node = (props) => {
 				Alert.alert('Server is down');
 			}
 		}
+	};
+
+	const storeData = async (key, value) => {
+		try {
+			await AsyncStorage.setItem(key, value);
+		} catch (e) {
+			console.log(`error saving key: ${key}`);
+		}
+	};
+
+	const onLoginClicked = () => {
+		login();
 	};
 
 	return (

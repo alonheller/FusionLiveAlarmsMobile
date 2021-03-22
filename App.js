@@ -7,6 +7,7 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import PrivateRoute from './components/PrivateRoute';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
+import Settings from './components/Settings';
 
 const App: () => React$Node = (props) => {
 	const [authenticated, setAuthenticated] = useState(false);
@@ -19,7 +20,7 @@ const App: () => React$Node = (props) => {
 	}, [authenticated]);
 
 	const [isAuthorized, setIsAuthorized] = useState(false);
-	const [server, setServer] = useState('http://192.168.1.150:10200');
+	const [server, setServer] = useState('');
 	const value = { isAuthorized, setIsAuthorized, server, setServer };
 
 	return (
@@ -30,6 +31,7 @@ const App: () => React$Node = (props) => {
 					<NativeRouter>
 						<Route exact path='/' component={Login} />
 						<PrivateRoute path='/dashboard' component={Dashboard} />
+						<PrivateRoute path='/settings' component={Settings} />
 					</NativeRouter>
 				</AuthContext.Provider>
 			</SafeAreaView>

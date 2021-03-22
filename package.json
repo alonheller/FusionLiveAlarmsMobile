@@ -11,6 +11,7 @@
 		"prettier": "prettier 'components/**/*.js'"
 	},
 	"dependencies": {
+		"@react-native-async-storage/async-storage": "^1.14.1",
 		"axios": "^0.21.1",
 		"date-fns": "^2.19.0",
 		"react": "16.13.1",

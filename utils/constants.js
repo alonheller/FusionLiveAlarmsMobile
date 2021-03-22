@@ -63,3 +63,7 @@ export const statusCodesMap = {
 	ROUTER_POWER_ALERT: 103,
 	ESCALATION_ALERT: 204
 };
+
+export const USER_KEY = 'USER';
+export const PASSWORD_KEY = 'PASSWORD';
+export const SERVER_KEY = 'SERVER';

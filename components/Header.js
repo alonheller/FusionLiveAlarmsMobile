@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image } from 'react-native';
+import { useHistory } from 'react-router-native';
 import { Icon } from 'react-native-elements';
 import { format } from 'date-fns';
 
 const Header: () => React$Node = ({ lastUpdate }) => {
+	const history = useHistory();
 	const [updated, setUpdated] = useState('---');
 
 	useEffect(() => {
@@ -11,6 +13,10 @@ const Header: () => React$Node = ({ lastUpdate }) => {
 			setUpdated(format(lastUpdate, 'MM/dd/yyyy hh:mm:ss aa'));
 		}
 	}, [lastUpdate]);
+
+	const onSettingsPress = () => {
+		history.push('/settings');
+	};
 
 	return (
 		<View>
@@ -20,7 +26,7 @@ const Header: () => React$Node = ({ lastUpdate }) => {
 			</View>
 			<View style={styles.logoContainer}>
 				<Image style={styles.tinyLogo} source={require('./logo.png')} />
-				<Icon name='settings' size={18} reverse />
+				<Icon name='settings' size={18} reverse onPress={onSettingsPress} />
 			</View>
 		</View>
 	);
