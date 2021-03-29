@@ -23,41 +23,12 @@ const App: () => React$Node = (props) => {
 
 	const [isAuthorized, setIsAuthorized] = useState(false);
 	const [server, setServer] = useState('');
-	const authContextValue = { isAuthorized, setIsAuthorized, server, setServer };
-
-	const [userId, setUserId] = useState(undefined);
-	const [locationTagList, setLocationTagList] = useState([]);
-	const [assetTagList, setAssetTagList] = useState([]);
-	const [configMode, setConfigMode] = useState(false);
-	const [hierarchyNav, setHierarchyNav] = useState(false);
-	const [refreshInterval, setRefreshInterval] = useState(undefined);
-	const [autoRefresh, setAutoRefresh] = useState(false);
-	const [configDrawerMode, setConfigDrawerMode] = useState(undefined);
-	const [darkMode, setDarkMode] = useState(false);
-
+	const [settings, setSettings] = useState({});
 	const [authenticatedUser, setAuthenticatedUser] = useState({});
-	const authenticatedUserValue = { authenticatedUser, setAuthenticatedUser };
 
-	const settingsContextValue = {
-		userId,
-		setUserId,
-		locationTagList,
-		setLocationTagList,
-		assetTagList,
-		setAssetTagList,
-		configMode,
-		setConfigMode,
-		hierarchyNav,
-		setHierarchyNav,
-		refreshInterval,
-		setRefreshInterval,
-		autoRefresh,
-		setAutoRefresh,
-		configDrawerMode,
-		setConfigDrawerMode,
-		darkMode,
-		setDarkMode
-	};
+	const authContextValue = { isAuthorized, setIsAuthorized, server, setServer };
+	const authenticatedUserContextValue = { authenticatedUser, setAuthenticatedUser };
+	const settingsContextValue = { settings, setSettings };
 
 	return (
 		<SafeAreaProvider>
@@ -65,7 +36,7 @@ const App: () => React$Node = (props) => {
 			<SafeAreaView style={styles.safeAreaView}>
 				<AuthContext.Provider value={authContextValue}>
 					<SettingsContext.Provider value={settingsContextValue}>
-						<AuthenticatedUserContext.Provider value={authenticatedUserValue}>
+						<AuthenticatedUserContext.Provider value={authenticatedUserContextValue}>
 							<NativeRouter>
 								<Route exact path='/' component={Login} />
 								<PrivateRoute path='/dashboard' component={Dashboard} />

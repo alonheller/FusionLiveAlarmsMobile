@@ -5,7 +5,7 @@ export const parseAlarms = (alarms, showWarnings) => {
 	let parsedAlarms = [];
 	const now = new Date();
 
-	// TODO: should come from settings
+	// TODO: should come from settings in server, it's not implemented there, saved only in local storage
 	const showAcksBypassAndSnooze = true;
 	const delayAlarmsInSeconds = 0;
 

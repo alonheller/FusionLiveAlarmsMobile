@@ -22,94 +22,9 @@ import Header from './Header';
 import AlarmListItem from './AlarmListItem';
 import { parseAlarms } from '../utils/alarms';
 
-const alarms = [
-	{
-		ID: 1,
-		AssetMeasureName: 'Temperature',
-		LastValue: '32.0 °F',
-		LocationName: "Eran's House",
-		AssetName: 'Garage Cooler',
-		CreatedOn: '2020-08-24T18:00:04Z',
-		status: 'ok'
-	},
-	{
-		ID: 2,
-		AssetMeasureName: 'Humidty',
-		LastValue: '16.9 %RH',
-		LocationName: 'Lab',
-		AssetName: 'Clean Room',
-		CreatedOn: '2020-08-24T18:00:04Z',
-		status: 'critical'
-	},
-	{
-		ID: 3,
-		AssetMeasureName: 'Temperature',
-		LastValue: '29.0 °F',
-		LocationName: "Eran's House",
-		AssetName: 'Garage Cooler',
-		CreatedOn: '2020-08-24T18:00:04Z',
-		status: 'fault'
-	},
-	{
-		ID: 4,
-		AssetMeasureName: 'Temperature',
-		LastValue: '10.0 °F',
-		LocationName: "Eran's House",
-		AssetName: 'Garage Cooler',
-		CreatedOn: '2020-08-24T18:00:04Z',
-		status: 'warning'
-	},
-	{
-		ID: 5,
-		AssetMeasureName: 'Temperature',
-		LastValue: '10.0 °F',
-		LocationName: "Eran's House",
-		AssetName: 'Garage Cooler',
-		CreatedOn: '2020-08-24T18:00:04Z',
-		status: 'error'
-	},
-	{
-		ID: 6,
-		AssetMeasureName: 'Temperature',
-		LastValue: '10.0 °F',
-		LocationName: "Eran's House",
-		AssetName: 'Garage Cooler',
-		CreatedOn: '2020-08-24T18:00:04Z',
-		status: 'error'
-	},
-	{
-		ID: 7,
-		AssetMeasureName: 'Temperature',
-		LastValue: '10.0 °F',
-		LocationName: "Eran's House",
-		AssetName: 'Garage Cooler',
-		CreatedOn: '2020-08-24T18:00:04Z',
-		status: 'error'
-	},
-	{
-		ID: 8,
-		AssetMeasureName: 'Temperature',
-		LastValue: '10.0 °F',
-		LocationName: "Eran's House",
-		AssetName: 'Garage Cooler',
-		CreatedOn: '2020-08-24T18:00:04Z',
-		status: 'error'
-	}
-];
-
 const Dashboard: () => React$Node = () => {
 	const { server } = useContext(AuthContext);
-	const {
-		setUserId,
-		setLocationTagList,
-		setAssetTagList,
-		setConfigMode,
-		setHierarchyNav,
-		setRefreshInterval,
-		setAutoRefresh,
-		setConfigDrawerMode,
-		setDarkMode
-	} = useContext(SettingsContext);
+	const { setSettings } = useContext(SettingsContext);
 	const { authenticatedUser, setAuthenticatedUser } = useContext(AuthenticatedUserContext);
 
 	const [loading, setLoading] = useState(false);
@@ -141,18 +56,7 @@ const Dashboard: () => React$Node = () => {
 				]);
 				setUserLocations(responses[0].data?.ReturnValue.$values);
 				setAuthenticatedUser(responses[1].data.ReturnValue);
-
-				const userSettings = responses[2].data.ReturnValue;
-				setUserId(userSettings.UserID);
-				setLocationTagList(userSettings.LocationTagList);
-				setAssetTagList(userSettings.AssetTagList);
-				setConfigMode(userSettings.ConfigMode);
-				setHierarchyNav(userSettings.HierarchyNav);
-				setRefreshInterval(userSettings.RefreshInterval);
-				setAutoRefresh(userSettings.AutoRefresh);
-				setConfigDrawerMode(userSettings.ConfigDrawerMode);
-				setDarkMode(userSettings.DarkMode);
-
+				setSettings(responses[2].data.ReturnValue);
 				setUserLocationsTags(responses[3].data.ReturnValue);
 				setPrerequisitesInitialized(true);
 			} catch (err) {
