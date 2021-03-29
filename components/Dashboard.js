@@ -14,6 +14,8 @@ import {
 import axios from 'axios';
 
 import AuthContext from '../context/auth';
+import SettingsContext from '../context/settings';
+import AuthenticatedUserContext from '../context/authenticatedUser';
 import generateApiObject from '../utils/api';
 import SummaryInfo from './SummaryInfo';
 import Header from './Header';
@@ -97,10 +99,21 @@ const alarms = [
 
 const Dashboard: () => React$Node = () => {
 	const { server } = useContext(AuthContext);
+	const {
+		setUserId,
+		setLocationTagList,
+		setAssetTagList,
+		setConfigMode,
+		setHierarchyNav,
+		setRefreshInterval,
+		setAutoRefresh,
+		setConfigDrawerMode,
+		setDarkMode
+	} = useContext(SettingsContext);
+	const { authenticatedUser, setAuthenticatedUser } = useContext(AuthenticatedUserContext);
+
 	const [loading, setLoading] = useState(false);
 	const [userLocations, setUserLocations] = useState();
-	const [authenticatedUser, setAuthenticatedUser] = useState();
-	const [userSettings, setUserSettings] = useState();
 	const [userLocationsTags, setUserLocationsTags] = useState();
 	const [prerequisitesInitialized, setPrerequisitesInitialized] = useState(false);
 	const [locationAlarms, setLocationAlarms] = useState([]);
@@ -128,7 +141,18 @@ const Dashboard: () => React$Node = () => {
 				]);
 				setUserLocations(responses[0].data?.ReturnValue.$values);
 				setAuthenticatedUser(responses[1].data.ReturnValue);
-				setUserSettings(responses[2].data.ReturnValue);
+
+				const userSettings = responses[2].data.ReturnValue;
+				setUserId(userSettings.UserID);
+				setLocationTagList(userSettings.LocationTagList);
+				setAssetTagList(userSettings.AssetTagList);
+				setConfigMode(userSettings.ConfigMode);
+				setHierarchyNav(userSettings.HierarchyNav);
+				setRefreshInterval(userSettings.RefreshInterval);
+				setAutoRefresh(userSettings.AutoRefresh);
+				setConfigDrawerMode(userSettings.ConfigDrawerMode);
+				setDarkMode(userSettings.DarkMode);
+
 				setUserLocationsTags(responses[3].data.ReturnValue);
 				setPrerequisitesInitialized(true);
 			} catch (err) {
