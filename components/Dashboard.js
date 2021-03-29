@@ -93,8 +93,8 @@ const Dashboard: () => React$Node = () => {
 				axiosOptionsLocationAlarms,
 				axiosOptionsLocationRouterAlarms
 			]);
-			setLocationAlarms(parseAlarms(responses[0].data?.ReturnValue?.$values), showWarnings);
-			setLocationRouterAlarms(parseAlarms(responses[1].data?.ReturnValue?.$values), showWarnings);
+			setLocationAlarms(parseAlarms(responses[0].data?.ReturnValue?.$values, showWarnings));
+			setLocationRouterAlarms(parseAlarms(responses[1].data?.ReturnValue?.$values, showWarnings));
 		} catch (err) {
 			console.log(err);
 			Alert.alert('Error on get alarms');

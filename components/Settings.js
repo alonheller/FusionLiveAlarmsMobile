@@ -63,15 +63,15 @@ const Settings: () => React$Node = () => {
 		settingsToSave.userSettings.RefreshInterval = settings.RefreshInterval;
 
 		const preferencesToSave = Object.create(null);
-		preferencesToSave.showWarnings = showWarnings; // override
+		preferencesToSave.firstName = authenticatedUser.FirstName;
+		preferencesToSave.middleName = authenticatedUser.MiddleName;
+		preferencesToSave.lastName = authenticatedUser.LastName;
 		preferencesToSave.captionemail = authenticatedUser.Email;
 		preferencesToSave.email2 = authenticatedUser.Email2;
 		preferencesToSave.email3 = authenticatedUser.Email3;
-		preferencesToSave.firstName = authenticatedUser.FirstName;
-		preferencesToSave.lastName = authenticatedUser.LastName;
-		preferencesToSave.locale = authenticatedUser.Locale;
-		preferencesToSave.middleName = authenticatedUser.MiddleName;
 		preferencesToSave.zoneName = authenticatedUser.ZoneName;
+		preferencesToSave.showWarnings = showWarnings; // override
+		preferencesToSave.locale = authenticatedUser.Locale;
 
 		const axiosOptionsSettings = axios(
 			generateApiObject(server, 'SaveUserSettings', settingsToSave)
