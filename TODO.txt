@@ -14,8 +14,7 @@ escallation - parsing time
 
 install fonts for android
 
-alon, Great12#
-https://fldevserver.econtrolsystems.com
+
 
 
 Done this week:
