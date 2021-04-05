@@ -2,19 +2,27 @@ Check user status on login - app.components.ts 180
 
 Handle multi roots
 
-// TODO: should come from settings
+// TODO: should come from settings in server, it's not implemented there, saved only in local storage
+// After talking with Eran - save them only on local iphone
   const showAcksBypassAndSnooze = true;
   const delayAlarmsInSeconds = 0;
 
-
+settings - dark mode, tags
 fix function parseDate
-
 fix function parseDuraion
-
-Alarms are not the same as in the web, router alarms should be also sorted
-  web: 160 alarms
-  mobile 158 alarms
-  
-badges yellow is not the same counter
+escallation - parsing time
 
 install fonts for android
+
+alon, Great12#
+https://fldevserver.econtrolsystems.com
+
+
+Done this week:
+===============
+1. Warning badge counter fix 
+2. Saving params - (Save setting, params by order, and not key value !!!)
+3. Goce style talk
+4. Goce environment
+5. SVN problem
+6. Dynamic CSS support (for dark mode)

@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, Image } from 'react-native';
 import { useHistory } from 'react-router-native';
 import { Icon } from 'react-native-elements';
 import { format } from 'date-fns';
 
+import SettingsContext from '../context/settings';
+
 const Header: () => React$Node = ({ lastUpdate }) => {
 	const history = useHistory();
 	const [updated, setUpdated] = useState('---');
+	const { settings, setSettings } = useContext(SettingsContext);
 
 	useEffect(() => {
 		if (lastUpdate instanceof Date && !isNaN(lastUpdate.valueOf())) {
@@ -22,7 +25,9 @@ const Header: () => React$Node = ({ lastUpdate }) => {
 		<View>
 			<View style={styles.elementsContainer}>
 				<Text style={styles.title}>ALARMS</Text>
-				<Text style={styles.subTitle}>Last update on: {updated}</Text>
+				<Text style={settings.DarkMode ? styles.subTitleRed : styles.subTitle}>
+					Last update on: {updated}
+				</Text>
 			</View>
 			<View style={styles.logoContainer}>
 				<Image style={styles.tinyLogo} source={require('./logo.png')} />
@@ -57,6 +62,10 @@ const styles = {
 	subTitle: {
 		fontSize: 11,
 		color: '#808491'
+	},
+	subTitleRed: {
+		fontSize: 11,
+		color: '#FF0000'
 	}
 };
 
