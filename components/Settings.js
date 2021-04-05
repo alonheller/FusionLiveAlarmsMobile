@@ -29,7 +29,7 @@ const Settings: () => React$Node = () => {
 
 	const [loading, setLoading] = useState(false);
 	const [showWarnings, setShowWarnings] = useState(authenticatedUser.ShowWarnings);
-	const [darkMode, setDarkMode] = useState(true); // TODO: should come from server
+	const [darkMode, setDarkMode] = useState(settings.DarkMode);
 
 	const onLogout = async () => {
 		storeData(USER_KEY, '');
@@ -57,7 +57,7 @@ const Settings: () => React$Node = () => {
 		settingsToSave.userSettings.AutoRefresh = settings.AutoRefresh;
 		settingsToSave.userSettings.ConfigDrawerMode = settings.ConfigDrawerMode;
 		settingsToSave.userSettings.ConfigMode = settings.ConfigMode;
-		settingsToSave.userSettings.DarkMode = settings.DarkMode; // TODO: Override
+		settingsToSave.userSettings.DarkMode = darkMode; // override
 		settingsToSave.userSettings.HierarchyNav = settings.HierarchyNav;
 		settingsToSave.userSettings.LocationTagList = settings.LocationTagList; // TODO: Override
 		settingsToSave.userSettings.RefreshInterval = settings.RefreshInterval;
